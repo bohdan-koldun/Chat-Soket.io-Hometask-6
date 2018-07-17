@@ -117,6 +117,7 @@ div {
 #send-msg-btn{
   background: #e78711;
   border: none;
+  font-size: 150%;
 }
 
 
@@ -191,6 +192,7 @@ div {
 
 #users{
   border-right: 1px solid #434dd9;
+  overflow-y: scroll;
 }
 
 #users li {

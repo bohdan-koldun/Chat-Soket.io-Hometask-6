@@ -30,8 +30,11 @@
     };
 
     socket.emit('new user', user);
-    socket.emit('connect to the chat', user);
   };
+
+  socket.on('user added', (user) => {
+    socket.emit('connect to the chat', user);
+  });
 
 
   //send message to the Chat
@@ -43,11 +46,13 @@
       time: new Date().toUTCString()
     };
 
+    // send new chat message event to the server
     socket.emit('chat message', data);
     inputMessage.value = '';
   };
 
 
+  //get chat history event
   socket.on('chat history', (msgArr) => {
     messagesDiv.innerHTML = '';
     for (let i in msgArr) {
@@ -57,6 +62,7 @@
     }
   });
 
+  //get user list event
   socket.on('user list', (userArr) => {
     userDiv.innerHTML = '';
     for (let i in userArr) {
@@ -66,10 +72,13 @@
     }
   });
 
+
+  //new message event
   socket.on('chat message', (msg) => {
     displayOneMsg(msg, userNickname);
   });
 
+  //user stats events
   socket.on('new user', (user) => {
     displayOneUser(user);
   });
@@ -86,6 +95,12 @@
     changeUserStatus(user, 'offline')
   });
 
+
+  //change duplicate nickname
+  socket.on('change nickname', (nickname) => {
+    userNickname = nickname;
+
+  });
 
   // user is typing event
   inputMessage.onkeyup = function () {
@@ -117,7 +132,7 @@
   function displayOneMsg(msg, nickname) {
     if (msg.message != '') {
       let elem = document.createElement('div');
-      if (msg.message.indexOf('@' + nickname) !== -1) {
+      if (msg.message.indexOf('@' + nickname + ' ') !== -1) {
         elem.style.backgroundColor = "#dadada";
       }
 
