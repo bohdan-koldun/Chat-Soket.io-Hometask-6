@@ -1,1 +1,10 @@
-# Chat-Soket.io-Hometask-6
+# Домашка Chat-Soket.io-Hometask-6
+
+![alt text](https://github.com/bohdan-koldun/Chat-Soket.io-Hometask-6/blob/master/screenshots/1.jpg "Enter to the chat")
+
+
+![alt text](https://github.com/bohdan-koldun/Chat-Soket.io-Hometask-6/blob/master/screenshots/2.jpg "The chat")
+
+![alt text](https://github.com/bohdan-koldun/Chat-Soket.io-Hometask-6/blob/master/screenshots/3.jpg "The typing")
+
+
