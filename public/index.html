@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Chat Socket.IO - Hometask Bohdan Koldun</title>
+  <link rel="stylesheet" href="/public/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+
+  <div class="pages">
+
+    <!-- Chat -->
+    <div class="chat page">
+      <div class="header-chat">Chat</div>
+      <div class="chatArea">
+        <div id="users"></div>
+        <div id="messages"></div>
+      </div>
+      <div class="message-input-grid">
+        <input id="inputMessage" placeholder="Type here..." />
+        <button id="send-msg-btn">Send</button>
+        <div id="is-typing-block"></div>
+      </div>
+    </div>
+
+    <!-- Login -->
+    <div class="login page">
+      <div class="header-chat">Enter to the Chat</div>
+      <div class="form">
+        <h3 class="title">What's your name?</h3>
+        <input class="nameInput" id="usernameInput" type="text" maxlength="32" />
+        <h3 class="title">What's your nickname?</h3>
+        <input class="nameInput" id="nicknameInput" type="text" maxlength="14" />
+        <br>
+        <button id="button-enter">Enter</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.dev.js"></script>
+  <script src="/public/script.js"></script>
+</body>
+
+</html>

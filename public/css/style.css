@@ -1,0 +1,250 @@
+/* Fix user-agent */
+
+* {
+  box-sizing: border-box;
+}
+
+
+hr {
+    border-top:1px dotted #434dd9;
+    margin:0;
+    /*Rest of stuff here*/
+}
+
+html {
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+}
+
+html, input {
+  font-family:
+    "HelveticaNeue-Light",
+    "Helvetica Neue Light",
+    "Helvetica Neue",
+    Helvetica,
+    Arial,
+    "Lucida Grande",
+    sans-serif;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+div {
+  list-style: none;
+  word-wrap: break-word;
+}
+
+/* Pages */
+
+.pages {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.page {
+  height: 100%;
+  position: absolute;
+  width: 100%;
+}
+
+.header-chat{
+  color: #fff;
+ line-height: 64px;
+ padding: 16px 32px;
+ font-size: 200%;
+  background-color: #3742d7f0;
+}
+
+/* Login Page */
+
+
+.login.page .form {
+  height: 100px;
+  margin-top: -100px;
+  position: absolute;
+
+  text-align: center;
+  top: 50%;
+  width: 100%;
+}
+
+.login.page .form .nameInput {
+  background-color: transparent;
+  border: none;
+  border-bottom: 2px solid #434dd9;
+  outline: none;
+  padding-bottom: 15px;
+  text-align: center;
+  width: 400px;
+}
+
+.login.page .title {
+  font-size: 200%;
+}
+
+.login.page .nameInput {
+  font-size: 200%;
+  letter-spacing: 3px;
+}
+
+.login.page .title, .login.page .nameInput {
+  color: #000;
+  font-weight: 100;
+}
+
+#button-enter{
+  margin-top: 50px;
+  font-size: 200%;
+  background: #434dd9;
+  color: #fff;
+  border: none;
+  padding: 10px 32px;
+}
+
+#button-enter:hover{
+
+  background: #e78711;
+
+}
+
+#send-msg-btn{
+  background: #e78711;
+  border: none;
+}
+
+
+#send-msg-btn:hover{
+  background: #0b9121;
+  color: #fff;
+}
+
+#is-typing-block {
+  background: #434dd9;
+  padding: 10px;
+  color: #fff2f2;
+}
+
+#is-typing-block  span{
+  line-height: 1.5;
+}
+/* Chat page */
+
+.chat.page {
+  display: none;
+}
+
+/* Font */
+
+#messages div{
+  font-size: 90%;
+  padding: 15px;
+  border-bottom:1px dotted #434dd9;
+  display:grid;
+  width: 100%;
+  grid-template-columns: 250px 1fr;
+}
+
+
+#messages span{
+  font-size: 95%;
+    color: #945100;
+}
+
+#messages span i{
+  font-size: 90%;
+  line-height: 1.5;
+    color: #2b2218;
+}
+
+#inputMessage {
+  font-size: 100%;
+}
+
+.log {
+  color: gray;
+  font-size: 70%;
+  margin: 5px;
+  text-align: center;
+}
+
+/* Messages */
+
+.chatArea {
+  height: 100%;
+  padding-bottom: 60px;
+  display: grid;
+  grid-template-columns: 340px 1fr;
+}
+
+#messages {
+  margin: 0;
+  overflow-y: scroll;
+  padding: 10px 20px 10px 20px;
+}
+
+#users{
+  border-right: 1px solid #434dd9;
+}
+
+#users li {
+  margin: 20px 10px 20px 50px;
+  line-height: 25px;
+  background-color: #e0e9c4;
+  padding: 15px 20px 5px;
+  width: 200px;
+  border-radius: 15%;
+}
+
+#users li i{
+  margin-right: 15px;
+  color: #ff9800;
+}
+#users li .status{
+    font-size: 80%;
+    color: #673AB7;
+}
+
+.message.typing .messageBody {
+  color: gray;
+}
+
+.username {
+  font-weight: 700;
+  overflow: hidden;
+  padding-right: 15px;
+  text-align: right;
+}
+
+.message-input-grid{
+  display: grid;
+  grid-template-columns: 1fr 200px;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  border: 10px solid #434dd9;
+  background: #434dd9;
+  outline: none;
+}
+
+
+
+/* Input */
+
+#inputMessage {
+
+ 
+  height: 60px;
+  left: 0;
+
+  padding-left: 10px;
+ 
+  right: 0;
+  width: 100%;
+}
