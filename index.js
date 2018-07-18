@@ -27,11 +27,17 @@ io.on('connection', function (socket) {
 
   //a user connected to the Chat
   socket.on('connect to the chat', (user) => {
-    connectedUser = user;
+    connectedUser = addNewUser(user);
+    socket.emit('connect to the chat', connectedUser.nickname);
+    io.emit('added new user', user);
+    //wait 60 second and set online
+    setTimeout(() => { io.emit('user online', user); changeStatusUser('online', user.nickname) }, 60000);
+
     socket.emit('chat history', messages);
     socket.emit('user list', users);
     console.log(`User ${connectedUser.nickname} connected`);
   });
+
 
   // a user is typing event
   socket.on('user is typing', (nickname) => {
@@ -44,14 +50,7 @@ io.on('connection', function (socket) {
     io.emit('chat message', msg);
   });
 
-  //add new user event
-  socket.on('new user', (user) => {
-    addNewUser(socket, user, connectedUser);
-    io.emit('user added', user);
-    io.emit('new user', user);
-     //wait 60 second and set online
-    setTimeout(() => { io.emit('user online', user); changeStatusUser('online', user.nickname) }, 60000);
-  });
+
 
   // when a user disconnects
   socket.on('disconnect', () => {
@@ -62,6 +61,8 @@ io.on('connection', function (socket) {
       time: new Date().toUTCString()
     };
 
+    console.log(`User ${connectedUser.nickname} disconnected`);
+
     if (connectedUser.nickname != null) {
       saveNewMessage(userLeftMsg, messages);
       io.emit('chat message', userLeftMsg);
@@ -71,10 +72,9 @@ io.on('connection', function (socket) {
     }
   });
 
-});
 
 
-//save new message in the history function
+  //save new message in the history function
 function saveNewMessage(msg, messages) {
   if (msg.message !== '') {
     messages.push(msg);
@@ -86,15 +86,15 @@ function saveNewMessage(msg, messages) {
 }
 
 // add new user function
-function addNewUser(socket, user, connectedUser) {
+function addNewUser(user) {
   users.forEach(item => {
     if (item.nickname === user.nickname) {
       user.nickname += Math.floor(Math.random() * 100);
-      socket.emit('change nickname', user.nickname);
       connectedUser = user;
     }
   });
   users.push(user);
+  return user;
 }
 
 //change user status function
@@ -112,6 +112,11 @@ function changeStatusUser(status, nickname) {
     }
   });
 }
+
+});
+
+
+
 
 // conect to server
 server.listen(port, () => {

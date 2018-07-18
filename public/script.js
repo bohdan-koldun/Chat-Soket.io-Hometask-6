@@ -5,17 +5,17 @@
   let loginButton = document.getElementById('button-enter');
   let sendMsgButton = document.getElementById('send-msg-btn');
   let messagesDiv = document.getElementById('messages');
+  let counterMsg = document.getElementById('counter-msg');
   let userDiv = document.getElementById('users');
   let loginArea = document.getElementsByClassName('login')[0];
   let chatArea = document.getElementsByClassName('chat')[0];
   let typingDiv = document.getElementById('is-typing-block');
 
-  let userName = 'User Name';
-  let userNickname = 'nickname';
+  let userName = 'User Name', userNickname = 'nickname';
 
   let socket = io.connect();
 
-  //login in the Chat
+  //login in the Chat - click button
   loginButton.onclick = () => {
     userName = nameInput.value || 'User Name';
     userNickname = nicknameInput.value || 'nickname';
@@ -29,40 +29,47 @@
       color: '#ff9800'
     };
 
-    socket.emit('new user', user);
+    //send user  data to the server
+    socket.emit('connect to the chat', user);
   };
 
-  socket.on('user added', (user) => {
-    socket.emit('connect to the chat', user);
+  //upgrate nickname from the server
+  socket.on('connect to the chat', (nickname) => {
+    userNickname = nickname;
+  });
+
+  //add new user to the Chat event
+  socket.on('added new user', (user) => {
+    displayOneUser(user);
   });
 
 
-  //send message to the Chat
+  //send message to the Chat - click button send
   sendMsgButton.onclick = () => {
-    let data = {
+    let msg = {
       name: userName,
       nickname: userNickname,
       message: inputMessage.value,
       time: new Date().toUTCString()
     };
 
-    // send new chat message event to the server
-    socket.emit('chat message', data);
+    // send new chat message to the server and clear input
+    socket.emit('chat message', msg);
     inputMessage.value = '';
   };
 
 
-  //get chat history event
+  //get chat history data - event
   socket.on('chat history', (msgArr) => {
     messagesDiv.innerHTML = '';
     for (let i in msgArr) {
       if (msgArr.hasOwnProperty(i)) {
-        displayOneMsg(msgArr[i], userNickname);
+        displayOneMsg(msgArr[i], userNickname, msgArr.length);
       }
     }
   });
 
-  //get user list event
+  //get user list data - event
   socket.on('user list', (userArr) => {
     userDiv.innerHTML = '';
     for (let i in userArr) {
@@ -72,17 +79,13 @@
     }
   });
 
-
-  //new message event
+  //get new message data - event
   socket.on('chat message', (msg) => {
-    displayOneMsg(msg, userNickname);
+    let length = (Number(counterMsg.innerHTML) + 1) % 101;
+    displayOneMsg(msg, userNickname, length);
   });
 
-  //user stats events
-  socket.on('new user', (user) => {
-    displayOneUser(user);
-  });
-
+  //get some user stats data - events
   socket.on('user online', (user) => {
     changeUserStatus(user, 'online')
   });
@@ -95,12 +98,6 @@
     changeUserStatus(user, 'offline')
   });
 
-
-  //change duplicate nickname
-  socket.on('change nickname', (nickname) => {
-    userNickname = nickname;
-
-  });
 
   // user is typing event
   inputMessage.onkeyup = function () {
@@ -128,28 +125,47 @@
     }
   });
 
-  //display Message
-  function displayOneMsg(msg, nickname) {
+  //display a message function
+  function displayOneMsg(msg, nickname, length) {
     if (msg.message != '') {
       let elem = document.createElement('div');
       if (msg.message.indexOf('@' + nickname + ' ') !== -1) {
         elem.style.backgroundColor = "#dadada";
       }
 
-      elem.innerHTML = `<span>${msg.name} <b>@${msg.nickname}</b><br> <i>${msg.time} </i></span><text>${msg.message}</text>`;
+      if (nickname == msg.nickname) {
+        elem.innerHTML = `<text class="right-message">${msg.message}</text><span>${msg.name} <b>@${msg.nickname}</b><br> <i>${msg.time} </i></span>`;
+        elem.style.gridTemplateColumns = '1fr 200px';
+      }
+      else {
+        elem.innerHTML = `<span>${msg.name} <b>@${msg.nickname}</b><br> <i>${msg.time} </i></span><text>${msg.message}</text>`;
+      }
+
       messagesDiv.appendChild(elem);
+
+      counterMsg.innerHTML = length;
+
+      //auto scroll to bottom
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
     }
   }
 
-  //display User
+  //display a User function
   function displayOneUser(user) {
     let elem = document.createElement('div');
-    elem.innerHTML = `<li><i class="fa fa-circle" id="icon-${user.nickname}"></i>${user.name} <br><b>@${user.nickname}</b><br><span class="status" id="status-${user.nickname}">${user.status}</span></li>`;
+
+    if (userNickname == user.nickname) {
+      elem.innerHTML = `<li><i class="fa fa-circle" id="icon-${user.nickname}"></i>${user.name}<b> (me)</b> <br><b>@${user.nickname}</b><br><span class="status" id="status-${user.nickname}">${user.status}</span></li>`;
+    }
+    else {
+      elem.innerHTML = `<li><i class="fa fa-circle" id="icon-${user.nickname}"></i>${user.name} <br><b>@${user.nickname}</b><br><span class="status" id="status-${user.nickname}">${user.status}</span></li>`;
+    }
+
     userDiv.appendChild(elem);
     document.getElementById(`icon-${user.nickname}`).style.color = user.color;
   }
 
-  //change status
+  //change status a user function
   function changeUserStatus(user, newstatus) {
 
     let statusText = document.getElementById(`status-${user.nickname}`);

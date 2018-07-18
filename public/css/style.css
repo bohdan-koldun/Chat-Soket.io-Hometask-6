@@ -188,10 +188,12 @@ div {
   margin: 0;
   overflow-y: scroll;
   padding: 10px 20px 10px 20px;
+  min-height: 100%;
 }
 
 #users{
   border-right: 1px solid #434dd9;
+  min-height: 100%;
   overflow-y: scroll;
 }
 
@@ -233,6 +235,11 @@ div {
   border: 10px solid #434dd9;
   background: #434dd9;
   outline: none;
+}
+
+.right-message{
+  text-align: right;
+  padding-right: 40px;
 }
 
 
