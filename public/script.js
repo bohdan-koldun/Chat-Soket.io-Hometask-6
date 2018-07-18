@@ -21,6 +21,7 @@
     userNickname = nicknameInput.value || 'nickname';
     loginArea.style.display = 'none';
     chatArea.style.display = 'block';
+    nameInput.value = '',  nicknameInput.value = '';
 
     let user = {
       name: userName,

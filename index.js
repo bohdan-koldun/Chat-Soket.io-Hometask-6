@@ -29,9 +29,9 @@ io.on('connection', function (socket) {
   socket.on('connect to the chat', (user) => {
     connectedUser = addNewUser(user);
     socket.emit('connect to the chat', connectedUser.nickname);
-    io.emit('added new user', user);
+    io.emit('added new user', connectedUser);
     //wait 60 second and set online
-    setTimeout(() => { io.emit('user online', user); changeStatusUser('online', user.nickname) }, 60000);
+    setTimeout(() => { changeStatusUser('online', connectedUser) }, 60000);
 
     socket.emit('chat history', messages);
     socket.emit('user list', users);
@@ -66,52 +66,59 @@ io.on('connection', function (socket) {
     if (connectedUser.nickname != null) {
       saveNewMessage(userLeftMsg, messages);
       io.emit('chat message', userLeftMsg);
-      io.emit('user just left', connectedUser); changeStatusUser('just left', connectedUser.nickname);
+      changeStatusUser('just left', connectedUser);
       //wait 60 second and set offline
-      setTimeout(() => { io.emit('user offline', connectedUser); changeStatusUser('offline', connectedUser.nickname); }, 60000);
+      setTimeout(() => { changeStatusUser('offline', connectedUser); }, 60000);
     }
   });
 
 
 
   //save new message in the history function
-function saveNewMessage(msg, messages) {
-  if (msg.message !== '') {
-    messages.push(msg);
-  }
-  // FIFO
-  if (messages.length > 100) {
-    messages.shift();
-  }
-}
-
-// add new user function
-function addNewUser(user) {
-  users.forEach(item => {
-    if (item.nickname === user.nickname) {
-      user.nickname += Math.floor(Math.random() * 100);
-      connectedUser = user;
+  function saveNewMessage(msg, messages) {
+    if (msg.message !== '') {
+      messages.push(msg);
     }
-  });
-  users.push(user);
-  return user;
-}
+    // FIFO
+    if (messages.length > 100) {
+      messages.shift();
+    }
+  }
 
-//change user status function
-function changeStatusUser(status, nickname) {
-  users.forEach(item => {
-    if (item.nickname === nickname) {
-      item.status = status;
-      if (status == 'online') {
-        item.color = '#00b75d';
-      } else if (status == 'just left') {
-        item.color = 'red';
-      } else if (status == 'offline') {
-        item.color = '#2b1111';
+  // add new user function
+  function addNewUser(user) {
+    users.forEach(item => {
+      if (item.nickname === user.nickname) {
+        user.nickname += Math.floor(Math.random() * 100);
+        connectedUser = user;
       }
-    }
-  });
-}
+    });
+    users.push(user);
+    return user;
+  }
+
+  //change user status function
+  function changeStatusUser(status, user) {
+    users.forEach(item => {
+      if (item.nickname === user.nickname) {
+        if (status == 'online' && item.status == 'just appeared') {
+          item.status = status;
+          item.color = '#00b75d';
+          io.emit('user online', user);
+        }
+        else if (status == 'just left' && (item.status == 'online' || item.status == 'just appeared')) {
+          item.status = status;
+          item.color = 'red';
+          io.emit('user just left', user);
+        }
+        else if (status == 'offline' && item.status == 'just left') {
+          item.status = status;
+          item.color = '#2b1111';
+          io.emit('user offline', user);
+        }
+      }
+    });
+  }
 
 });
 
