@@ -2,8 +2,8 @@ const MESSAGE_HISTORY_LENGTH = 100;
 
 
 class ChatRepository {
-  constructor(proxyHandler, messages = [], users = []) {
-    this.messages =  new Proxy( messages, proxyHandler);
+  constructor(messages = [], users = []) {
+    this.messages = messages;
     this.users = users;
   }
 

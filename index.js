@@ -3,9 +3,7 @@ const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 const Message = require('./Chat/message.js');
 const User = require('./Chat/user.js');
-const ChatRepository = require('./Chat/chatRepository');
-const messageSendHandler = require('./Chat/proxyHandler');
-const BotRequest = require('./Chat/botRequest');
+const ChatRepository = require('./Chat/chatRepository.js');
 const TIME_DELAY_CHANGE_STATUS = 6000;
 const PORT = 3000;
 
@@ -23,23 +21,7 @@ app.get('/public/script.js', (req, res) => {
 });
 
 
-//-------
-const factory = new BotRequest();
-fulltime = factory.create('weather');
-parttime = factory.create('money exchange');
-temporary = factory.create('weather');
-contractor = factory.create('weather');
-
-fulltime.getResponse();
-parttime.getResponse();
-temporary.getResponse();
-contractor.getResponse();
-
-
-//--------------
-
-let chatRepository = new ChatRepository(messageSendHandler);
-
+let chatRepository = new ChatRepository();
 
 // a user conection event
 io.on('connection', function (socket) {
@@ -55,8 +37,7 @@ io.on('connection', function (socket) {
     io.emit('added new user', connectedUser);
 
     setTimeout(() => {
-      let result = chatRepository.changeStatusUser('online', connectedUser);
-      console.log(result )
+      let result = chatRepository.changeStatusUser('online', connectedUser)
       io.emit(result, connectedUser);
     },
       TIME_DELAY_CHANGE_STATUS);
