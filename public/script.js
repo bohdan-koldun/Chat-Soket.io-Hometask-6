@@ -45,8 +45,19 @@
   });
 
 
-  //send message to the Chat - click button send
+  //send message to the Chat - click button or enter to send
   sendMsgButton.onclick = () => {
+    sendMessageToServer();
+  };
+
+  inputMessage.addEventListener("keyup", function(event) {
+    event.preventDefault();
+    if (event.keyCode === 13) {
+      sendMessageToServer();
+    }
+  });
+
+  function sendMessageToServer() {
     let msg = {
       name: userName,
       nickname: userNickname,
@@ -57,7 +68,7 @@
     // send new chat message to the server and clear input
     socket.emit('chat message', msg);
     inputMessage.value = '';
-  };
+  }
 
 
   //get chat history data - event
@@ -187,7 +198,5 @@
     }
 
   }
-
-
 
 })();
